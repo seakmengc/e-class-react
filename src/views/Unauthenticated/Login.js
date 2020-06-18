@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
 import { USER_LOGIN } from './Api'
 import Error from './ErrorMessage'
 import auth from '../../variables/constants.js'
+
 
 // reactstrap components
 import {
@@ -23,6 +24,7 @@ import {
   Row,
   Col,
 } from 'reactstrap'
+import { gql } from 'apollo-boost'
 
 const Login = (props) => {
   const { inputs, handleChange, resetForm } = useForm({
@@ -35,6 +37,8 @@ const Login = (props) => {
   const [login, { data, error, loading }] = useMutation(USER_LOGIN, {
     variables: inputs,
   })
+
+  if(auth.isLogin) return <Redirect to='/' />
 
   return (
     <FormWrapper>
@@ -57,14 +61,14 @@ const Login = (props) => {
                   let res
                   try {
                     res = await login()
+                    console.log(this.context);
+                    
                     localStorage.setItem(
                       'refreshToken',
                       res.data.login.refresh_token
                     )
                     auth.accessToken = res.data.login.access_token
-                    setInterval(() => {
-                      console.log(1)
-                    }, 2)
+                    auth.isLogin = true
                     console.log(res, auth)
                     // handle data
                     props.history.push('/')

@@ -4,6 +4,10 @@ import classNames from "classnames";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
 
+import auth from '../variables/constants';
+
+import  { Redirect } from 'react-router-dom'
+
 // reactstrap components
 import {
   Button,
@@ -45,7 +49,9 @@ class Dashboard extends React.Component {
       bigChartData: name,
     });
   };
+
   render() {
+    if(!auth.isLogin) return <Redirect to='/login' />
     return (
       <>
         <div className="content">
