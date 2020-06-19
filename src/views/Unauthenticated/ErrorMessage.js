@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import React from 'react'
 
+// reactstrap components
+import { Alert } from 'reactstrap'
+
 const ErrorStyles = styled.div`
   padding: 2rem;
   margin: 1rem 0;
@@ -32,12 +35,13 @@ const DisplayError = ({ error }) => {
     ))
   }
   return (
-    <ErrorStyles>
-      <p data-testid="graphql-error">
-        <strong>Oh Shoot!</strong>
-        {error.message.replace('GraphQL error: ', '')}
-      </p>
-    </ErrorStyles>
+    <>
+      {error?.graphQLErrors[0]?.extensions?.reason && (
+        <Alert style={{ margin: 30, marginBottom: 0 }} color="danger">
+          {error.graphQLErrors[0]?.extensions?.reason}
+        </Alert>
+      )}
+    </>
   )
 }
 

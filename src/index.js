@@ -18,12 +18,16 @@ const hist = createBrowserHistory()
 const client = new ApolloClient({
   uri: 'https://api.raymond.digital/graphql',
   request: (operation) => {
-    const token = localStorage.getItem('token')
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    })
+    const accessToken = localStorage.getItem('access_token')
+    const refreshToken = localStorage.getItem('refresh_token')
+    if (accessToken && refreshToken)
+      operation.setContext({
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'x-access-token': accessToken,
+          'x-refresh-token': refreshToken,
+        },
+      })
   },
 })
 
@@ -35,6 +39,11 @@ const App = () => (
         <Route
           exact
           path="/user-profile"
+          render={(props) => <AdminLayout {...props} />}
+        />
+        <Route
+          exact
+          path="/users"
           render={(props) => <AdminLayout {...props} />}
         />
         <Route path="/rtl" render={(props) => <RTLLayout {...props} />} />
@@ -49,7 +58,6 @@ const App = () => (
         <Redirect from="*" to="/" />
       </Switch>
     </Router>
-    ,
   </ApolloProvider>
 )
 

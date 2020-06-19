@@ -10,6 +10,7 @@ import Login from 'views/Unauthenticated/Login.js'
 import Register from 'views/Unauthenticated/Register.js'
 import ForgotPassword from 'views/Unauthenticated/ForgotPassword.js'
 import ResetPassword from 'views/Unauthenticated/ResetPassword.js'
+import Table from 'views/Users/Table.js'
 
 var routes = [
   {
@@ -109,6 +110,13 @@ var routes = [
     name: 'User Profile',
     icon: 'tim-icons icon-single-02',
     component: UserProfile,
+    layout: '/admin',
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    icon: 'tim-icons icon-single-02',
+    component: Table,
     layout: '/admin',
   },
 ]

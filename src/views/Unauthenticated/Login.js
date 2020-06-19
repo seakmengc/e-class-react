@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
-import { USER_LOGIN } from './Api'
+import { USER_LOGIN_MUTATION } from './Api'
 import Error from './ErrorMessage'
 
 // reactstrap components
@@ -31,7 +31,7 @@ const Login = (props) => {
 
   const [validation, setValidation] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
-  const [login, { data, error, loading }] = useMutation(USER_LOGIN, {
+  const [login, { error, loading }] = useMutation(USER_LOGIN_MUTATION, {
     variables: inputs,
   })
 
@@ -43,23 +43,29 @@ const Login = (props) => {
             <CardHeader>
               <H3 className="title">Login</H3>
             </CardHeader>
-            {error?.graphQLErrors[0]?.extensions?.reason && (
-              <Alert style={{ margin: 30, marginBottom: 0 }} color="danger">
-                {error.graphQLErrors[0]?.extensions?.reason}
-              </Alert>
-            )}
+            <Error error={error} />
             <CardBody>
               <Form
                 onSubmit={async (e) => {
                   e.preventDefault()
+                  setIsButtonDisabled(true)
                   // setValidation(true)
-                  let res
                   try {
-                    res = await login()
-                    console.log(res)
+                    const { data } = await login()
+                    const {
+                      access_token,
+                      refresh_token,
+                      expires_in,
+                    } = data?.login
+
                     // handle data
+                    localStorage.setItem('access_token', access_token)
+                    localStorage.setItem('refresh_token', refresh_token)
+
                     props.history.push('/')
-                  } catch {}
+                  } catch (err) {
+                    setIsButtonDisabled(false)
+                  }
                 }}
               >
                 <Row className="p-3">

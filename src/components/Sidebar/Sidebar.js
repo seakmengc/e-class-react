@@ -3,12 +3,18 @@ import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 // nodejs library to set properties for components
 import { PropTypes } from 'prop-types'
+import styled from 'styled-components'
 
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from 'perfect-scrollbar'
 
 // reactstrap components
 import { Nav, NavLink as ReactstrapNavLink } from 'reactstrap'
+
+const NavItem = styled.p`
+  font-weight: bold;
+  font-size: 0.8rem;
+`
 
 var ps
 
@@ -19,7 +25,7 @@ class Sidebar extends React.Component {
   }
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? 'active' : ''
+    return this.props.location.pathname === routeName ? 'active' : ''
   }
   componentDidMount() {
     if (navigator.platform.indexOf('Win') > -1) {
@@ -115,7 +121,7 @@ class Sidebar extends React.Component {
                     onClick={this.props.toggleSidebar}
                   >
                     <i className={prop.icon} />
-                    <p>{rtlActive ? prop.rtlName : prop.name}</p>
+                    <NavItem>{rtlActive ? prop.rtlName : prop.name}</NavItem>
                   </NavLink>
                 </li>
               )

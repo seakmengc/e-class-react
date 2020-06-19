@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
+import { CURRENT_USER_QUERY } from '../lib/User'
 
 // reactstrap components
 import {
@@ -17,32 +18,13 @@ import {
   Col,
 } from 'reactstrap'
 
-const USER_PROFILE = gql`
-  query USER_PROFILE($id: ID!) {
-    user(id: $id) {
-      username
-      email
-      identity {
-        id
-        first_name
-        last_name
-        gender
-        photo_url
-        contact_number
-      }
-    }
-  }
-`
-
 const UserProfile = (props) => {
-  const { loading, error, data } = useQuery(USER_PROFILE, {
-    variables: { id: 1 },
-  })
+  const { loading, error, data } = useQuery(CURRENT_USER_QUERY)
 
   if (loading) return <p>Loading...</p>
   if (error) return `Error! ${error}`
 
-  const { username, email, identity } = data.user
+  const { username, email, identity } = data.me
 
   return (
     <div className="content">

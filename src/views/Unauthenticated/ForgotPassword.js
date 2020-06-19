@@ -3,7 +3,9 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import useFrom from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
-import { FORGOT_PASSWORD } from './Api'
+import { FORGOT_PASSWORD_MUTATION } from './Api'
+import Error from './ErrorMessage'
+
 // reactstrap components
 import {
   Alert,
@@ -27,7 +29,7 @@ const ForgotPassword = (props) => {
   })
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const [forgotPassword, { data, error, loading }] = useMutation(
-    FORGOT_PASSWORD,
+    FORGOT_PASSWORD_MUTATION,
     {
       variables: inputs,
     }
@@ -41,10 +43,7 @@ const ForgotPassword = (props) => {
             <CardHeader>
               <H3 className="title">Forgot Password</H3>
             </CardHeader>
-            {error?.graphQLErrors[0]?.extensions?.reason && (
-              <Alert style={{ margin: 30, marginBottom: 0 }} color="danger">
-                {error.graphQLErrors[0]?.extensions?.reason}
-              </Alert>
+            <Error error={error} />
             )}
             <CardBody>
               <Form
