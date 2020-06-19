@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { Link, Redirect } from 'react-router-dom'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
 import { USER_LOGIN } from './Api'
 import Error from './ErrorMessage'
-import auth from '../../variables/constants.js'
 
+import { AuthContext } from '../../contexts/auth'
+import { REFRESH_TOKEN } from 'views/Unauthenticated/Api'
 
 // reactstrap components
 import {
@@ -38,8 +39,22 @@ const Login = (props) => {
     variables: inputs,
   })
 
-  if(auth.isLogin) return <Redirect to='/' />
+  const authContext = useContext(AuthContext)
 
+  const [refreshToken, {}] = useMutation(REFRESH_TOKEN, {
+    variables: {
+      refreshToken: localStorage.getItem('refreshToken'),
+    },
+  })
+
+  useEffect(() => {
+    if (localStorage.getItem('refreshToken'))
+      authContext.refreshToken(refreshToken, authContext).then((res) => {
+        props.history.push('/')
+      })
+  }, [])
+
+  console.log(props.history)
   return (
     <FormWrapper>
       <Row style={{ width: 700 }}>
@@ -58,21 +73,9 @@ const Login = (props) => {
                 onSubmit={async (e) => {
                   e.preventDefault()
                   // setValidation(true)
-                  let res
-                  try {
-                    res = await login()
-                    console.log(this.context);
-                    
-                    localStorage.setItem(
-                      'refreshToken',
-                      res.data.login.refresh_token
-                    )
-                    auth.accessToken = res.data.login.access_token
-                    auth.isLogin = true
-                    console.log(res, auth)
-                    // handle data
-                    props.history.push('/')
-                  } catch {}
+                  await authContext.login(login, authContext)
+
+                  props.history.push('/')
                 }}
               >
                 <Row className="p-3">
