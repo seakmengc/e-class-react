@@ -1,12 +1,10 @@
-import React from "react";
+import React from 'react'
 // nodejs library that concatenates classes
-import classNames from "classnames";
+import classNames from 'classnames'
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar } from 'react-chartjs-2'
 
-import auth from '../variables/constants';
-
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 // reactstrap components
 import {
@@ -27,7 +25,7 @@ import {
   Row,
   Col,
   UncontrolledTooltip,
-} from "reactstrap";
+} from 'reactstrap'
 
 // core components
 import {
@@ -35,23 +33,22 @@ import {
   chartExample2,
   chartExample3,
   chartExample4,
-} from "variables/charts.js";
+} from 'variables/charts.js'
 
 class Dashboard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      bigChartData: "data1",
-    };
+      bigChartData: 'data1',
+    }
   }
   setBgChartData = (name) => {
     this.setState({
       bigChartData: name,
-    });
-  };
+    })
+  }
 
   render() {
-    if(!auth.isLogin) return <Redirect to='/login' />
     return (
       <>
         <div className="content">
@@ -71,13 +68,13 @@ class Dashboard extends React.Component {
                       >
                         <Button
                           tag="label"
-                          className={classNames("btn-simple", {
-                            active: this.state.bigChartData === "data1",
+                          className={classNames('btn-simple', {
+                            active: this.state.bigChartData === 'data1',
                           })}
                           color="info"
                           id="0"
                           size="sm"
-                          onClick={() => this.setBgChartData("data1")}
+                          onClick={() => this.setBgChartData('data1')}
                         >
                           <input
                             defaultChecked
@@ -97,10 +94,10 @@ class Dashboard extends React.Component {
                           id="1"
                           size="sm"
                           tag="label"
-                          className={classNames("btn-simple", {
-                            active: this.state.bigChartData === "data2",
+                          className={classNames('btn-simple', {
+                            active: this.state.bigChartData === 'data2',
                           })}
-                          onClick={() => this.setBgChartData("data2")}
+                          onClick={() => this.setBgChartData('data2')}
                         >
                           <input
                             className="d-none"
@@ -119,10 +116,10 @@ class Dashboard extends React.Component {
                           id="2"
                           size="sm"
                           tag="label"
-                          className={classNames("btn-simple", {
-                            active: this.state.bigChartData === "data3",
+                          className={classNames('btn-simple', {
+                            active: this.state.bigChartData === 'data3',
                           })}
-                          onClick={() => this.setBgChartData("data3")}
+                          onClick={() => this.setBgChartData('data3')}
                         >
                           <input
                             className="d-none"
@@ -175,7 +172,7 @@ class Dashboard extends React.Component {
                 <CardHeader>
                   <h5 className="card-category">Daily Sales</h5>
                   <CardTitle tag="h3">
-                    <i className="tim-icons icon-delivery-fast text-primary" />{" "}
+                    <i className="tim-icons icon-delivery-fast text-primary" />{' '}
                     3,500€
                   </CardTitle>
                 </CardHeader>
@@ -542,8 +539,8 @@ class Dashboard extends React.Component {
           </Row>
         </div>
       </>
-    );
+    )
   }
 }
 
-export default Dashboard;
+export default Dashboard

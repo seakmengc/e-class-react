@@ -44,6 +44,11 @@ export const USER_LOGIN = gql`
       refresh_token
       access_token
       expires_in
+      user {
+        id
+        username
+        email
+      }
     }
   }
 `
