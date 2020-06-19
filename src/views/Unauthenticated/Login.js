@@ -41,11 +41,7 @@ const Login = (props) => {
 
   const authContext = useContext(AuthContext)
 
-  const [refreshToken, {}] = useMutation(REFRESH_TOKEN, {
-    variables: {
-      refreshToken: localStorage.getItem('refreshToken'),
-    },
-  })
+  const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
 
   useEffect(() => {
     if (localStorage.getItem('refreshToken'))
@@ -73,7 +69,7 @@ const Login = (props) => {
                 onSubmit={async (e) => {
                   e.preventDefault()
                   // setValidation(true)
-                  await authContext.login(login, authContext)
+                  await authContext.login(login, authContext, refreshToken)
 
                   props.history.push('/')
                 }}

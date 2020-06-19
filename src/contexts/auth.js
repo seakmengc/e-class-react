@@ -1,17 +1,28 @@
 import { createContext } from 'react'
 
+const setAuthContext = (context, data, refreshTokenGql) => {
+  console.log('try set authContext')
+
+  localStorage.setItem('refreshToken', data.refresh_token)
+  context.isLogin = true
+  context.accessToken = data.access_token
+  context.user = data.user
+  setTimeout(
+    context.refreshToken,
+    data.expires_in * 1000,
+    refreshTokenGql,
+    context
+  )
+}
+
 const AuthContext = createContext({
   user: null,
   isLogin: false,
   accessToken: null,
-  login: async (loginGql, context) => {
+  login: async (loginGql, context, refreshTokenGql) => {
     const res = await loginGql()
 
-    localStorage.setItem('refreshToken', res.data.login.refresh_token)
-    context.isLogin = true
-    context.accessToken = res.data.login.access_token
-    context.user = res.data.login.user
-    console.log(context)
+    setAuthContext(context, res.data.login, refreshTokenGql)
   },
   logout: async (logoutGql, context) => {
     await logoutGql()
@@ -20,18 +31,18 @@ const AuthContext = createContext({
     context.isLogin = false
     context.accessToken = null
     context.user = null
-    console.log(context)
   },
   refreshToken: async (refreshTokenGql, context) => {
-    const res = await refreshTokenGql()
+    console.log('try refresh token', refreshTokenGql)
+    const res = await refreshTokenGql({
+      variables: {
+        refreshToken: localStorage.getItem('refreshToken'),
+      },
+    })
+    console.log('done refresh token')
 
-    localStorage.setItem('refreshToken', res.data.refreshToken.refresh_token)
-    context.isLogin = true
-    context.accessToken = res.data.refreshToken.access_token
-    context.user = res.data.refreshToken.user
-    console.log({ context })
-    console.log({ res })
+    setAuthContext(context, res.data.refreshToken, refreshTokenGql)
   },
 })
 
-export { AuthContext }
+export { AuthContext, setAuthContext }
