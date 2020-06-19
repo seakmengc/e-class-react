@@ -7,6 +7,7 @@ const setAuthContext = (context, data, refreshTokenGql) => {
   context.isLogin = true
   context.accessToken = data.access_token
   context.user = data.user
+
   setTimeout(
     context.refreshToken,
     data.expires_in * 1000,
@@ -34,11 +35,17 @@ const AuthContext = createContext({
   },
   refreshToken: async (refreshTokenGql, context) => {
     console.log('try refresh token', refreshTokenGql)
-    const res = await refreshTokenGql({
-      variables: {
-        refreshToken: localStorage.getItem('refreshToken'),
-      },
-    })
+    let res
+    try {
+      res = await refreshTokenGql({
+        variables: {
+          refreshToken: localStorage.getItem('refreshToken'),
+        },
+      })
+    } catch (e) {
+      localStorage.removeItem('refreshToken')
+      return;
+    }
     console.log('done refresh token')
 
     setAuthContext(context, res.data.refreshToken, refreshTokenGql)
