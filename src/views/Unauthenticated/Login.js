@@ -59,7 +59,7 @@ const Login = (props) => {
                   // setValidation(true)
                   await authContext.login(login, authContext, refreshToken)
 
-                  props.history.push('/')
+                  props.history.goBack()
                 }}
               >
                 <Row className="p-3">

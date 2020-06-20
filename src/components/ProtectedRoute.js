@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Route, Redirect, withRouter } from 'react-router-dom'
 import { AuthContext } from '../contexts/auth'
 import { useMutation, Mutation } from 'react-apollo'
@@ -9,12 +9,22 @@ const ProtectedRoute = ({ render: Render, ...rest }) => {
 
   const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
 
+  const [isRefreshingToken, setIsRefreshingToken] = useState(false)
+
   useEffect(() => {
-    if (!authContext.isLogin && localStorage.getItem('refreshToken'))
-      authContext.refreshToken(refreshToken, authContext).then((res) => {
-        rest.history.push(rest.path)
-      })
-  }, [])
+    if (!authContext.isLogin) {
+      if (localStorage.getItem('refreshToken')) {
+        authContext.refreshToken(refreshToken, authContext).then((res) => {
+          console.log(rest);
+          rest.history.push(rest.path)
+        }).catch(e => {
+          rest.history.push('/login')
+        })
+      } else {
+        rest.history.push('/login')
+      }
+    }
+  }, [authContext])
 
   if (authContext.isLogin) return <Route {...rest} render={Render} />
   else return <div></div>
