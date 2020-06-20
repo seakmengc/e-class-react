@@ -45,6 +45,14 @@ export const USER_LOGIN_MUTATION = gql`
         id
         username
         email
+      }
+    }
+  }
+`
+
+export const REFRESH_TOKEN = gql`
+  mutation REFRESH_TOKEN($refreshToken: String!) {
+    refreshToken(input: { refresh_token: $refreshToken }) {
         identity {
           id
           first_name

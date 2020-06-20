@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
 import { USER_LOGIN_MUTATION } from './Api'
 import Error from './ErrorMessage'
+
+import { AuthContext } from '../../contexts/auth'
+import { REFRESH_TOKEN } from 'views/Unauthenticated/Api'
 
 // reactstrap components
 import {
@@ -22,6 +25,7 @@ import {
   Row,
   Col,
 } from 'reactstrap'
+import { gql } from 'apollo-boost'
 
 const Login = (props) => {
   const { inputs, handleChange, resetForm } = useForm({
@@ -34,6 +38,17 @@ const Login = (props) => {
   const [login, { error, loading }] = useMutation(USER_LOGIN_MUTATION, {
     variables: inputs,
   })
+
+  const authContext = useContext(AuthContext)
+
+  const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
+
+  useEffect(() => {
+    if (localStorage.getItem('refreshToken'))
+      authContext.refreshToken(refreshToken, authContext).then((res) => {
+        props.history.push('/')
+      })
+  }, [])
 
   return (
     <FormWrapper>
@@ -50,22 +65,9 @@ const Login = (props) => {
                   e.preventDefault()
                   setIsButtonDisabled(true)
                   // setValidation(true)
-                  try {
-                    const { data } = await login()
-                    const {
-                      access_token,
-                      refresh_token,
-                      expires_in,
-                    } = data?.login
+                  await authContext.login(login, authContext, refreshToken)
 
-                    // handle data
-                    localStorage.setItem('access_token', access_token)
-                    localStorage.setItem('refresh_token', refresh_token)
-
-                    props.history.push('/')
-                  } catch (err) {
-                    setIsButtonDisabled(false)
-                  }
+                  props.history.push('/')
                 }}
               >
                 <Row className="p-3">
