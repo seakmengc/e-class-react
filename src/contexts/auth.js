@@ -34,7 +34,7 @@ const AuthContext = createContext({
     context.user = null
   },
   refreshToken: async (refreshTokenGql, context) => {
-    console.log('try refresh token', refreshTokenGql)
+    console.log('try refresh token')
     let res
     try {
       res = await refreshTokenGql({
@@ -42,6 +42,8 @@ const AuthContext = createContext({
           refreshToken: localStorage.getItem('refreshToken'),
         },
       })
+      console.log(res);
+      
     } catch (e) {
       localStorage.removeItem('refreshToken')
       return;

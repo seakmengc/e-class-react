@@ -25,7 +25,6 @@ import {
   Row,
   Col,
 } from 'reactstrap'
-import { gql } from 'apollo-boost'
 
 const Login = (props) => {
   const { inputs, handleChange, resetForm } = useForm({
@@ -44,7 +43,7 @@ const Login = (props) => {
   const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
 
   useEffect(() => {
-    if (localStorage.getItem('refreshToken'))
+    if (!authContext.isLogin && localStorage.getItem('refreshToken'))
       authContext.refreshToken(refreshToken, authContext).then((res) => {
         props.history.push('/')
       })

@@ -41,6 +41,9 @@ export const USER_REGISTER_MUTATION = gql`
 export const USER_LOGIN_MUTATION = gql`
   mutation USER_LOGIN_MUTATION($username: String!, $password: String!) {
     login(input: { username: $username, password: $password }) {
+      refresh_token
+      access_token
+      expires_in
       user {
         id
         username
@@ -53,15 +56,6 @@ export const USER_LOGIN_MUTATION = gql`
 export const REFRESH_TOKEN = gql`
   mutation REFRESH_TOKEN($refreshToken: String!) {
     refreshToken(input: { refresh_token: $refreshToken }) {
-        identity {
-          id
-          first_name
-          last_name
-          gender
-          photo_url
-          contact_number
-        }
-      }
       refresh_token
       access_token
       expires_in

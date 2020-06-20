@@ -22,13 +22,13 @@ const App = () => {
   const authContext = useContext(AuthContext)
 
   const client = new ApolloClient({
-    uri: 'https://api.raymond.digital/graphql',
+    uri: 'https://e-class-api.app/graphql',
     fetchOptions: {
       credentials: 'include',
     },
     request: (operation) => {
       const token = authContext.accessToken
-      console.log(authContext.accessToken)
+      console.log(authContext)
 
       operation.setContext({
         headers: {
