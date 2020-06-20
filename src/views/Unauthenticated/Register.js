@@ -3,7 +3,8 @@ import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
-import { GET_ENUM, USER_REGISTER } from './Api'
+import { GET_ENUM_QUERY, USER_REGISTER_MUTATION } from './Api'
+import Error from './ErrorMessage'
 
 import {
   Alert,
@@ -22,7 +23,7 @@ import {
 } from 'reactstrap'
 
 const Register = (props) => {
-  const GENDERS = useQuery(GET_ENUM, {
+  const GENDERS = useQuery(GET_ENUM_QUERY, {
     variables: { name: 'Gender' },
   })
 
@@ -37,9 +38,12 @@ const Register = (props) => {
   const [gender, setGender] = useState(null)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
-  const [register, { data, error, loading }] = useMutation(USER_REGISTER, {
-    variables: { ...inputs, gender },
-  })
+  const [register, { data, error, loading }] = useMutation(
+    USER_REGISTER_MUTATION,
+    {
+      variables: { ...inputs, gender },
+    }
+  )
 
   if (GENDERS.loading) return null
   if (GENDERS.error) return 'Error'
@@ -51,12 +55,8 @@ const Register = (props) => {
           <Card className="form">
             <CardHeader>
               <H3 className="title">Register</H3>
-            </CardHeader>
-            {error?.graphQLErrors[0]?.extensions?.reason && (
-              <Alert style={{ margin: 30, marginBottom: 0 }} color="danger">
-                {error.graphQLErrors[0]?.extensions?.reason}
-              </Alert>
-            )}
+            </CardHeader>{' '}
+            <Error error={error} />
             <CardBody>
               <Form
                 onSubmit={async (e) => {

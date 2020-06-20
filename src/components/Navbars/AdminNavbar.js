@@ -2,6 +2,8 @@ import React from 'react'
 // nodejs library that concatenates classes
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import Logout from './Logout'
+
 // reactstrap components
 import {
   Button,
@@ -20,12 +22,18 @@ import {
   Modal,
 } from 'reactstrap'
 import styled from 'styled-components'
+import { useMutation } from 'react-apollo'
 
-const LogoBrand = styled.h3`
-  position: fixed;
+const LogoBrand = styled.h4`
   color: var(--primary);
   text-transform: uppercase;
   font-weight: bold;
+  margin: 0;
+  margin-left: 0.5rem;
+  position: fixed;
+  @media (max-width: 991.98px) {
+    position: static;
+  }
 `
 
 class AdminNavbar extends React.Component {
@@ -199,7 +207,7 @@ class AdminNavbar extends React.Component {
                     </NavLink>
                     <DropdownItem divider tag="li" />
                     <NavLink tag="li">
-                      <DropdownItem className="nav-item">Log out</DropdownItem>
+                      <Logout {...this.props} />
                     </NavLink>
                   </DropdownMenu>
                 </UncontrolledDropdown>

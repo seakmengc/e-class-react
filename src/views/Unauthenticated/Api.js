@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const GET_ENUM = gql`
-  query GET_ENUM($name: String!) {
+export const GET_ENUM_QUERY = gql`
+  query GET_ENUM_QUERY($name: String!) {
     __type(name: $name) {
       enumValues {
         name
@@ -10,8 +10,8 @@ export const GET_ENUM = gql`
   }
 `
 
-export const USER_REGISTER = gql`
-  mutation USER_REGISTER(
+export const USER_REGISTER_MUTATION = gql`
+  mutation USER_REGISTER_MUTATION(
     $username: String!
     $password: String!
     $email: String!
@@ -38,12 +38,9 @@ export const USER_REGISTER = gql`
   }
 `
 
-export const USER_LOGIN = gql`
-  mutation USER_LOGIN($username: String!, $password: String!) {
+export const USER_LOGIN_MUTATION = gql`
+  mutation USER_LOGIN_MUTATION($username: String!, $password: String!) {
     login(input: { username: $username, password: $password }) {
-      refresh_token
-      access_token
-      expires_in
       user {
         id
         username
@@ -56,6 +53,15 @@ export const USER_LOGIN = gql`
 export const REFRESH_TOKEN = gql`
   mutation REFRESH_TOKEN($refreshToken: String!) {
     refreshToken(input: { refresh_token: $refreshToken }) {
+        identity {
+          id
+          first_name
+          last_name
+          gender
+          photo_url
+          contact_number
+        }
+      }
       refresh_token
       access_token
       expires_in
@@ -63,8 +69,8 @@ export const REFRESH_TOKEN = gql`
   }
 `
 
-export const FORGOT_PASSWORD = gql`
-  mutation FORGOT_PASSWORD($username: String!) {
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation FORGOT_PASSWORD_MUTATION($username: String!) {
     forgotPassword(input: { username: $username }) {
       status
       statusCode
@@ -73,8 +79,12 @@ export const FORGOT_PASSWORD = gql`
   }
 `
 
-export const RESET_PASSWORD = gql`
-  mutation RESET_PASSWORD($username: String!, $password: String!, $otp: Int!) {
+export const RESET_PASSWORD_MUTATION = gql`
+  mutation RESET_PASSWORD_MUTATION(
+    $username: String!
+    $password: String!
+    $otp: Int!
+  ) {
     resetPassword(
       input: { username: $username, password: $password, otp: $otp }
     ) {
