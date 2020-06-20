@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import useForm from '../../lib/useForm'
 import { FormWrapper, H3 } from './Styled'
 import { USER_LOGIN_MUTATION } from './Api'
@@ -41,13 +41,6 @@ const Login = (props) => {
   const authContext = useContext(AuthContext)
 
   const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
-
-  useEffect(() => {
-    if (!authContext.isLogin && localStorage.getItem('refreshToken'))
-      authContext.refreshToken(refreshToken, authContext).then((res) => {
-        props.history.push('/')
-      })
-  }, [])
 
   return (
     <FormWrapper>
