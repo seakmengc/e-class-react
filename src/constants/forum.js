@@ -121,21 +121,33 @@ export const FORUMS_IN_CLASS_QUERY = gql`
 			page: $page,
 			class_id: $classId
 		) {
-			id
-			title
-			description
-			author {
+			data {
 				id
-				identity {
-					first_name
-					last_name
-					photo_url
+				title
+				description
+				author {
+					id
+					identity {
+						first_name
+						last_name
+						photo_url
+					}
+				}
+				comments_count
+				answer {
+					id
+					comment
 				}
 			}
-			comments_count
-			answer {
-				id
-				comment
+			paginatorInfo {
+				count
+				currentPage
+				hasMorePages
+				lastPage
+				total
+				perPage
+				lastItem
+				firstItem
 			}
 		}
 	}
@@ -176,6 +188,73 @@ export const FORUM_QUERY = gql`
 			answer {
 				id
 				comment
+			}
+		}
+	}
+`
+
+export const MY_FORUMS_QUERY = gql`
+	mutation MY_FORUMS_QUERY(
+		$first: Int!
+		$page: Int!
+	) {
+		mutation myForums(first: $first, page: $page) {
+			data {
+				id
+				title
+				comments_count
+				answer {
+					id
+					comment
+				}
+				created_at
+			}
+			paginatorInfo {
+				count
+				currentPage
+				hasMorePages
+				lastPage
+				total
+				perPage
+				lastItem
+				firstItem
+			}
+		}
+	}
+`
+
+
+export const MY_COMMENTS_QUERY = gql`
+	mutation MY_COMMENTS_QUERY(
+		$first: Int!
+		$page: Int!
+	) {
+		mutation myComments(first: $first, page: $page) {
+			data {
+				id
+				comment
+				commentable {
+					...on Forum {
+						id
+						title
+						comments_count
+						answer {
+							id
+							comment
+						}
+					}
+				}
+				created_at
+			}
+			paginatorInfo {
+				count
+				currentPage
+				hasMorePages
+				lastPage
+				total
+				perPage
+				lastItem
+				firstItem
 			}
 		}
 	}
