@@ -1,5 +1,4 @@
 import React from 'react'
-import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { CURRENT_USER_QUERY } from '../lib/User'
 
@@ -120,7 +119,7 @@ const UserProfile = (props) => {
                   <img
                     alt="..."
                     className="avatar"
-                    src={require('assets/img/emilyz.jpg')}
+                    src={identity.photo_url}
                   />
                   <h3 className="title my-1">{`${identity.first_name} ${identity.last_name}`}</h3>
                   <h5 className="title mb-4">{email}</h5>

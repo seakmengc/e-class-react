@@ -7,7 +7,7 @@ import { USER_LOGIN_MUTATION } from './Api'
 import Error from './ErrorMessage'
 
 import { AuthContext } from '../../contexts/auth'
-import { REFRESH_TOKEN } from 'views/Unauthenticated/Api'
+import { REFRESH_TOKEN_MUTATION } from 'views/Unauthenticated/Api'
 
 // reactstrap components
 import {
@@ -40,7 +40,7 @@ const Login = (props) => {
 
   const authContext = useContext(AuthContext)
 
-  const [refreshToken, {}] = useMutation(REFRESH_TOKEN)
+  const [refreshToken, {}] = useMutation(REFRESH_TOKEN_MUTATION)
 
   return (
     <FormWrapper>
